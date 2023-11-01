@@ -1,28 +1,43 @@
+import { useEffect } from "react"
+import { Outlet } from "react-router-dom"
+import { useSetRecoilState } from "recoil"
+import { onAuthStateChanged } from "firebase/auth"
+import { AppShell, Burger, Button, Group, ScrollArea, Skeleton } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
-import { AppShell, Burger, Button, Group, ScrollArea, Skeleton, Title, UnstyledButton } from "@mantine/core"
-import classes from "./App.module.css"
+import { auth } from "../firebase"
+import { authenticatedState } from "../data/auth"
+import AppMenu from "./AppMenu"
 
-export default function App() {
-  const [opened, { toggle }] = useDisclosure()
+export default function App({ isMobile }: { isMobile: boolean }) {
+  // AppShell UI state
+  const [opened, { toggle }] = useDisclosure(!isMobile)
   const [disabled, { toggle: toggleDisabled }] = useDisclosure()
+
+  // Set global state on auth changed
+  const setAuthenticated = useSetRecoilState(authenticatedState)
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthenticated(true)
+      } else {
+        setAuthenticated(false)
+      }
+    })
+  }, [setAuthenticated])
 
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened, desktop: !opened } }}
       padding="md"
       disabled={disabled}
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Title></Title>
-            <Group ml="xl" gap={0}>
-              <UnstyledButton className={classes.control}>Home</UnstyledButton>
-              <UnstyledButton className={classes.control}>Blog</UnstyledButton>
-              <UnstyledButton className={classes.control}>Contacts</UnstyledButton>
-            </Group>
+            <Burger opened={opened} onClick={toggle} size="sm" />
+            <AppMenu />
           </Group>
         </Group>
       </AppShell.Header>
@@ -40,7 +55,10 @@ export default function App() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Button onClick={toggleDisabled}>Toggle disabled</Button>
+        <Outlet />
+        <Group justify="flex-end" mt="xl">
+          <Button onClick={toggleDisabled}>Toggle disabled</Button>
+        </Group>
       </AppShell.Main>
     </AppShell>
   )

@@ -1,21 +1,27 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { createTheme, MantineProvider } from "@mantine/core"
+import { RecoilRoot } from "recoil"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { createTheme, MantineProvider } from "@mantine/core"
+import { Notifications } from "@mantine/notifications"
 import "@mantine/core/styles.css"
-import App from "./app/App"
+import "@mantine/notifications/styles.css"
+import routes from "./routes"
 
 const queryClient = new QueryClient()
-const router = createBrowserRouter([{ path: "/", element: <App /> }])
+const router = createBrowserRouter(routes)
 const theme = createTheme({})
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
-    <MantineProvider theme={theme} defaultColorScheme="dark">
+    <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <MantineProvider theme={theme} defaultColorScheme="dark">
+          <Notifications position="top-right" />
+          <RouterProvider router={router} />
+        </MantineProvider>
       </QueryClientProvider>
-    </MantineProvider>
+    </RecoilRoot>
   </StrictMode>,
 )
