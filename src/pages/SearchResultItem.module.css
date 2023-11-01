@@ -1,0 +1,10 @@
+.item {
+  border-radius: 0.25rem;
+  flex: none;
+  min-width: 10rem;
+  max-width: 20rem;
+
+  @mixin hover {
+    background: rgba(0, 0, 0, 0.25);
+  }
+}

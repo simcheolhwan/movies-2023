@@ -6,6 +6,8 @@ import classes from "./AppMenu.module.css"
 const AppMenu = () => {
   const isAuthenticated = useIsAuthenticated()
 
+  if (typeof isAuthenticated !== "boolean") return null
+
   const menu = [
     { to: "/", label: "Browse" },
     { to: "/new", label: "Add" },

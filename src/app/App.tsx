@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { useSetRecoilState } from "recoil"
 import { onAuthStateChanged } from "firebase/auth"
-import { AppShell, Burger, Button, Group, ScrollArea, Skeleton } from "@mantine/core"
+import { AppShell, Burger, Group, ScrollArea, Skeleton } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { auth } from "../firebase"
 import { authenticatedState } from "../data/auth"
@@ -11,7 +11,7 @@ import AppMenu from "./AppMenu"
 export default function App({ isMobile }: { isMobile: boolean }) {
   // AppShell UI state
   const [opened, { toggle }] = useDisclosure(!isMobile)
-  const [disabled, { toggle: toggleDisabled }] = useDisclosure()
+  const [disabled] = useDisclosure()
 
   // Set global state on auth changed
   const setAuthenticated = useSetRecoilState(authenticatedState)
@@ -56,9 +56,6 @@ export default function App({ isMobile }: { isMobile: boolean }) {
 
       <AppShell.Main>
         <Outlet />
-        <Group justify="flex-end" mt="xl">
-          <Button onClick={toggleDisabled}>Toggle disabled</Button>
-        </Group>
       </AppShell.Main>
     </AppShell>
   )

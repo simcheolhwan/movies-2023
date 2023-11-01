@@ -1,9 +1,7 @@
-import { useMantineTheme } from "@mantine/core"
-import { useMediaQuery } from "@mantine/hooks"
+import useIsMobile from "./useIsMobile"
 
 export default function WithIsMobile({ children }: { children: (isMobile: boolean) => React.ReactNode }) {
-  const { breakpoints } = useMantineTheme()
-  const isMobile = useMediaQuery(`(max-width: ${breakpoints.sm})`)
+  const isMobile = useIsMobile()
   if (typeof isMobile !== "boolean") return null
   return <>{children(isMobile)}</>
 }

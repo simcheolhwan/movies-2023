@@ -5,8 +5,10 @@ import { RecoilRoot } from "recoil"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createTheme, MantineProvider } from "@mantine/core"
 import { Notifications } from "@mantine/notifications"
+import { ModalsProvider } from "@mantine/modals"
 import "@mantine/core/styles.css"
 import "@mantine/notifications/styles.css"
+import "@mantine/code-highlight/styles.css"
 import routes from "./routes"
 
 const queryClient = new QueryClient()
@@ -19,7 +21,9 @@ createRoot(document.getElementById("root") as HTMLElement).render(
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <Notifications position="top-right" />
-          <RouterProvider router={router} />
+          <ModalsProvider>
+            <RouterProvider router={router} />
+          </ModalsProvider>
         </MantineProvider>
       </QueryClientProvider>
     </RecoilRoot>

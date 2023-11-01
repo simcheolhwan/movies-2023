@@ -1,8 +1,8 @@
 import { atom, useRecoilValue } from "recoil"
 
-export const authenticatedState = atom({
+export const authenticatedState = atom<boolean | undefined>({
   key: "authenticatedState",
-  default: false,
+  default: undefined,
 })
 
 export function useIsAuthenticated() {
